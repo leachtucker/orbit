@@ -27,11 +27,20 @@ const AuthProvider = ({ children }) => {
     });
   }
 
+  const isAutheticated = () => {
+    if (!authState.token || !authState.expiresAt) {
+      return false;
+    }
+
+    return new Date().getTime() / 1000 < authState.expiresAt;
+  }
+
   return (
     <Provider
       value={{
         authState,
-        setAuthState: authInfo => setAuthInfo(authInfo)
+        setAuthState: authInfo => setAuthInfo(authInfo),
+        isAutheticated
       }}
     >
       {children}
