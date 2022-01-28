@@ -3,15 +3,11 @@ const AuthContext = createContext();
 const { Provider } = AuthContext;
 
 const AuthProvider = ({ children }) => {
-  const initialAuthState = () => {
-    const state = {
-      token: localStorage.getItem("token"),
-      expiresAt: localStorage.getItem("expiresAt"),
-      userInfo: JSON.parse(localStorage.getItem("userInfo") || {})
-    };
-
-    return state;
-  }
+  const initialAuthState = () => ({
+    token: localStorage.getItem("token"),
+    expiresAt: localStorage.getItem("expiresAt"),
+    userInfo: JSON.parse(localStorage.getItem("userInfo"))
+  });
 
   const [authState, setAuthState] = useState(initialAuthState);
 
