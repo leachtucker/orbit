@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
     history.push("/login");
   }
 
-  const isAutheticated = () => {
+  const isAuthenticated = () => {
     if (!authState.token || !authState.expiresAt) {
       return false;
     }
@@ -48,7 +48,7 @@ const AuthProvider = ({ children }) => {
   }
 
   const isAdmin = () => {
-    return authState.userInfo.role = "admin";
+    return authState.userInfo.role === "admin";
   }
 
   return (
@@ -56,7 +56,7 @@ const AuthProvider = ({ children }) => {
       value={{
         authState,
         setAuthState: authInfo => setAuthInfo(authInfo),
-        isAutheticated,
+        isAuthenticated,
         logout,
         isAdmin
       }}
