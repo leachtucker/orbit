@@ -59,7 +59,7 @@ const Loading = () => {
 
 const AppRoutes = () => {
   return (
-    <Suspense fallback={Loading}>
+    <Suspense fallback={<Loading />}>
       <Switch>
         <Route path="/login">
           <Login />
