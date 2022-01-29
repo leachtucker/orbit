@@ -25,7 +25,7 @@ const Home = () => {
               Sign Up
             </Link>
             <GradientLink
-              to={authContext.isAutheticated() ? "/dashboard" : "/login"}
+              to={authContext.isAuthenticated() ? "/dashboard" : "/login"}
               text="Log In"
             />
           </div>
@@ -51,7 +51,7 @@ const Home = () => {
               <GradientLink
                 text="Get Started"
                 size="lg"
-                to={authContext.isAutheticated() ? "/dashboard" : "/signup"}
+                to={authContext.isAuthenticated() ? "/dashboard" : "/signup"}
               />
             </div>
           </div>
