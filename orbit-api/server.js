@@ -5,6 +5,7 @@ const cors = require('cors');
 const jwtDecode = require('jwt-decode');
 const mongoose = require('mongoose');
 const jwt = require('express-jwt');
+const cookieParser = require('cookie-parser');
 
 const dashboardData = require('./data/dashboard');
 const User = require('./data/User');
@@ -21,6 +22,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.post('/api/authenticate', async (req, res) => {
   try {
@@ -49,6 +51,10 @@ app.post('/api/authenticate', async (req, res) => {
 
       const decodedToken = jwtDecode(token);
       const expiresAt = decodedToken.exp;
+
+      res.cookie("token", token, {
+        httpOnly: true
+      });
 
       res.json({
         message: 'Authentication successful!',
@@ -117,6 +123,10 @@ app.post('/api/signup', async (req, res) => {
         role
       };
 
+      res.cookie("token", token, {
+        httpOnly: true
+      });
+
       return res.json({
         message: 'User created!',
         token,
@@ -136,14 +146,15 @@ app.post('/api/signup', async (req, res) => {
 });
 
 const attachUser = (req, res, next) => {
-  const token = req.headers.authorization;
+  const token = req.cookies.token;
+
   if (!token) {
     return res.status(401).json({
       message: "Auth invalid"
     });
   }
 
-  const decodedToken = jwtDecode(token.slice(7));
+  const decodedToken = jwtDecode(token);
 
   if (!decodedToken) {
     return res.status(401).json({
@@ -160,7 +171,8 @@ app.use(attachUser);
 const checkJwt = jwt({
   secret: process.env.JWT_SECRET,
   issuer: 'api.orbit',
-  audience: 'api.orbit'
+  audience: 'api.orbit',
+  getToken: req => req.cookies.token
 });
 
 const requireAdmin = (req, res, next) => {
